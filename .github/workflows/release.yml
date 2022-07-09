@@ -27,6 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'AkiSakurai/OpenTabletDriver.Packaging'
+          ref: arm64
       - name: Checkout OpenTabletDriver Repository
         uses: actions/checkout@v2
         with:
@@ -89,6 +90,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'AkiSakurai/OpenTabletDriver.Packaging'
+          ref: arm64
       - name: Checkout OpenTabletDriver Repository
         uses: actions/checkout@v2
         with:
@@ -134,6 +136,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'AkiSakurai/OpenTabletDriver.Packaging'
+          ref: arm64
       - name: Checkout OpenTabletDriver Repository
         uses: actions/checkout@v2
         with:
