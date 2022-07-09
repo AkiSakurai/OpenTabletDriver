@@ -6,6 +6,14 @@ on:
       version_suffix:
         description: 'The version suffix for this manual build.'
         required: false
+      repository:
+        description: 'Repository'
+        options:
+          - 'OpenTabletDriver/OpenTabletDriver'
+          - 'AkiSakurai/OpenTabletDriver'
+        default: "OpenTabletDriver/OpenTabletDriver"
+      ref:
+        description: "Ref"
   release:
     types: [ published ]
 jobs:
@@ -18,12 +26,13 @@ jobs:
       - name: Checkout Packaging Repository
         uses: actions/checkout@v2
         with:
-          repository: 'OpenTabletDriver/OpenTabletDriver.Packaging'
+          repository: 'AkiSakurai/OpenTabletDriver.Packaging'
       - name: Checkout OpenTabletDriver Repository
         uses: actions/checkout@v2
         with:
-          repository: 'OpenTabletDriver/OpenTabletDriver'
+          repository: ${{ github.event.inputs.repository }}
           path: 'src/OpenTabletDriver'
+          ref: ${{ github.event.inputs.ref }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -79,12 +88,13 @@ jobs:
       - name: Checkout Packaging Repository
         uses: actions/checkout@v2
         with:
-          repository: 'OpenTabletDriver/OpenTabletDriver.Packaging'
+          repository: 'AkiSakurai/OpenTabletDriver.Packaging'
       - name: Checkout OpenTabletDriver Repository
         uses: actions/checkout@v2
         with:
-          repository: 'OpenTabletDriver/OpenTabletDriver'
+          repository: ${{ github.event.inputs.repository }}
           path: 'src/OpenTabletDriver'
+          ref: ${{ github.event.inputs.ref }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -115,12 +125,13 @@ jobs:
       - name: Checkout Packaging Repository
         uses: actions/checkout@v2
         with:
-          repository: 'OpenTabletDriver/OpenTabletDriver.Packaging'
+          repository: 'AkiSakurai/OpenTabletDriver.Packaging'
       - name: Checkout OpenTabletDriver Repository
         uses: actions/checkout@v2
         with:
-          repository: 'OpenTabletDriver/OpenTabletDriver'
+          repository: ${{ github.event.inputs.repository }}
           path: 'src/OpenTabletDriver'
+          ref: ${{ github.event.inputs.ref }}
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
