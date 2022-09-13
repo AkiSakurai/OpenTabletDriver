@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using OpenTabletDriver.Native.OSX;
@@ -6,7 +7,6 @@ using OpenTabletDriver.Native.OSX.Generic;
 using OpenTabletDriver.Native.OSX.Input;
 using OpenTabletDriver.Platform.Display;
 using OpenTabletDriver.Platform.Pointer;
-
 namespace OpenTabletDriver.Desktop.Interop.Input
 {
     using static OSX;
@@ -20,12 +20,15 @@ namespace OpenTabletDriver.Desktop.Interop.Input
         }
 
         private readonly InputDictionary _inputDictionary = new InputDictionary();
+        private ClickCountCounter _clickCountCounter = new();
+
         protected CGEventType MoveEvent = CGEventType.kCGEventMouseMoved;
         protected CGPoint Offset;
         protected CGMouseButton PressedButtons;
 
         public void MouseDown(MouseButton button)
         {
+            _clickCountCounter.MouseDown();
             if (!GetMouseButtonState(button))
             {
                 CGEventType type;
@@ -157,8 +160,40 @@ namespace OpenTabletDriver.Desktop.Interop.Input
             var curPos = GetPosition();
             var cgPos = new CGPoint(curPos.X, curPos.Y) - Offset;
             var mouseEventRef = CGEventCreateMouseEvent(IntPtr.Zero, type, cgPos, cgButton);
+            CGEventSetIntegerValueField(mouseEventRef, CGEventField.kCGMouseEventClickState, _clickCountCounter.ClickCount);
             CGEventPost(CGEventTapLocation.kCGHIDEventTap, mouseEventRef);
             CFRelease(mouseEventRef);
+        }
+
+        private class ClickCountCounter
+        {
+            private static readonly int CickTime = getDoubleClickInterval();
+
+            public long ClickCount { get; private set; } = 1;
+
+            private Stopwatch _lastMouseDown = new();
+
+            public void MouseDown()
+            {
+                if (_lastMouseDown.ElapsedMilliseconds > CickTime)
+                {
+                    ClickCount = 1;
+                }
+                else
+                {
+                    ClickCount++;
+                }
+
+                _lastMouseDown.Restart();
+            }
+
+            private static int getDoubleClickInterval()
+            {
+                var handle = NXOpenEventStatus();
+                var interval = NXClickTime(handle);
+                NXCloseEventStatus(handle);
+                return (int)(interval * 1000);
+            }
         }
     }
 }

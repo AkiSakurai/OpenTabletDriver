@@ -9,6 +9,7 @@ namespace OpenTabletDriver.Native.OSX
     using CGError = Int32;
     using CGEventRef = IntPtr;
     using CGEventSourceRef = IntPtr;
+    using NXEventHandle = UInt32;
 
     public static class OSX
     {
@@ -49,5 +50,20 @@ namespace OpenTabletDriver.Native.OSX
 
         [DllImport(Quartz)]
         public extern static CGRect CGDisplayBounds(CGDirectDisplayID displayID);
+
+        [DllImport(Quartz)]
+        public extern static void CGEventSetIntegerValueField(CGEventRef eventRef, CGEventField field, Int64 value);
+
+        [DllImport(Quartz)]
+        public extern static void CGEventSetDoubleValueField(CGEventRef eventRef, CGEventField field, double value);
+
+        [DllImport(Quartz)]
+        public extern static NXEventHandle NXOpenEventStatus();
+
+        [DllImport(Quartz)]
+        public extern static void NXCloseEventStatus(NXEventHandle handle);
+
+        [DllImport(Quartz)]
+        public extern static double NXClickTime(NXEventHandle handle);
     }
 }
