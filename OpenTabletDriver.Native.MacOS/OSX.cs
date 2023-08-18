@@ -12,6 +12,8 @@ namespace OpenTabletDriver.Native.MacOS
 
     public static class MacOS
     {
+        public const int CGEventSourceStateHIDSystemState = 1;
+
         private const string Quartz = "/System/Library/Frameworks/Quartz.framework/Versions/Current/Quartz";
         private const string Foundation = "/System/Library/Frameworks/Foundation.framework/Foundation";
 
@@ -42,6 +44,15 @@ namespace OpenTabletDriver.Native.MacOS
 
         [DllImport(Quartz)]
         public extern static void CGEventSetLocation(CGEventRef eventRef, CGPoint location);
+
+        [DllImport(Quartz)]
+        public extern static void CGEventSetFlags(CGEventRef eventRef, ulong flags);
+
+        [DllImport(Quartz)]
+        public extern static CGEventSourceRef CGEventSourceCreate(int stateID);
+
+        [DllImport(Quartz)]
+        public extern static ulong CGEventSourceFlagsState(int stateID);
 
         [DllImport(Quartz)]
         public extern static CGEventRef CGEventPost(CGEventTapLocation tap, CGEventRef eventRef);
