@@ -108,6 +108,33 @@ jobs:
           name: OpenTabletDriver osx-x64
           path: build/osx-x64
 
+  macospublish-arm64:
+    runs-on: macos-14
+    name: MacOS ARM64 Publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3.2.0
+        with:
+          dotnet-version: '8.0'
+
+      - name: MacOS Publish
+        env:
+          runtime: osx-arm64
+        run: |
+          options=(--configuration Release -p:DebugType=embedded -p:PublishTrimmed=false --no-self-contained -p:SourceRevisionId=$(git rev-parse --short HEAD))
+          dotnet publish OpenTabletDriver.Daemon "${options[@]}" --runtime "$runtime" -o "build/$runtime"
+          dotnet publish OpenTabletDriver.Console "${options[@]}" --runtime "$runtime" -o "build/$runtime"
+          dotnet publish OpenTabletDriver.UX.MacOS "${options[@]}" --runtime "$runtime" -o "build/$runtime"
+
+      - name: Upload MacOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: OpenTabletDriver osx-arm64
+          path: build/osx-arm64
+
   windowspublish:
     runs-on: windows-latest
     name: Windows Publish

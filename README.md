@@ -68,6 +68,7 @@ The generic binary tarball is designed to be extracted from the root directory.
 
 #### MacOS [Experimental]
 
+A newer version of Bash and Coreutils is required to build OTD. You can install them using Homebrew.
 Run `./eng/macos/package.sh --package true`.
 
 # Features

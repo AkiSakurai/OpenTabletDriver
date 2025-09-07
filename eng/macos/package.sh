@@ -3,7 +3,12 @@
 set -eu
 . "$(dirname "${BASH_SOURCE[0]}")/../lib.sh"
 
-NET_RUNTIME="osx-x64"
+if [[ $(uname -m) == "arm64" ]]; then
+    NET_RUNTIME="osx-arm64"
+else
+    NET_RUNTIME="osx-x64"
+fi
+
 SINGLE_FILE="false"
 SELF_CONTAINED="true"
 
@@ -77,6 +82,14 @@ if [ "${PACKAGE}" = "true" ]; then
   mkdir -p "${pkg_root}/Contents/Resources"
   cp "${PKG_SCRIPT_ROOT}/Icon.icns" "${pkg_root}/Contents/Resources/"
   cp "${PKG_SCRIPT_ROOT}/Info.plist" "${pkg_root}/Contents/"
+
+  if type -p codesign
+  then
+    echo "Signing ${NET_RUNTIME} MacOS App..."
+    codesign  -s - -f --deep "${pkg_root}"
+  else
+    echo "Skipping signing ${NET_RUNTIME} MacOS App..."
+  fi
 
   echo "Creating tarball..."
   create_binary_tarball "${pkg_root}" "${OUTPUT}/${pkg_file}"
