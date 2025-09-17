@@ -83,6 +83,9 @@ if [ "${PACKAGE}" = "true" ]; then
   cp "${PKG_SCRIPT_ROOT}/Icon.icns" "${pkg_root}/Contents/Resources/"
   cp "${PKG_SCRIPT_ROOT}/Info.plist" "${pkg_root}/Contents/"
 
+  # Remove the redundant app created by the SDK since we are using a custom app bundle structure
+  rm -rf "${pkg_root}/Contents/MacOS/OpenTabletDriver.UX.MacOS.app"
+
   if type -p codesign
   then
     echo "Signing ${NET_RUNTIME} MacOS App..."
