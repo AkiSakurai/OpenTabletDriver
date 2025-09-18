@@ -2,7 +2,7 @@
   "profiles": {
     "MacOS UI": {
       "commandName": "Executable",
-      "executablePath": "$(MSBuildProjectDirectory)/bin/$(ConfigurationName)/$(TargetFramework)/OpenTabletDriver.UX.MacOS.app/Contents/MacOS/OpenTabletDriver.UX.MacOS"
+      "executablePath": "$(MSBuildProjectDirectory)/$(OutputAppPath)/Contents/MacOS/OpenTabletDriver.UX.MacOS"
     }
   }
 }
