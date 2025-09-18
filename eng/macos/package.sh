@@ -34,18 +34,18 @@ print_help() {
 args=("$@")          # copy args
 remaining_args=()    # remaining args after parsing
 is_extra_args=false  # whether we've reached '--'
-extra_args=()        # args after '--'
+extra_args=("/p:MacBuildBundle=false")        # args after '--'
 
 parse_build_args "args" "remaining_args"
 PKG_FILE="${OTD_LNAME}-${OTD_VERSION}-${NET_RUNTIME}.app.tar.gz"
 
 while [ ${#remaining_args[@]} -gt 0 ]; do
   if $is_extra_args; then
-    extra_args=("$@")
+    extra_args=("${extra_args[0]} $remaining_args")
     break
   fi
 
-  case "$1" in
+  case "${remaining_args[0]}" in
     --package=*)
       PACKAGE="${1#*=}"
       ;;
@@ -82,9 +82,6 @@ if [ "${PACKAGE}" = "true" ]; then
   mkdir -p "${pkg_root}/Contents/Resources"
   cp "${PKG_SCRIPT_ROOT}/Icon.icns" "${pkg_root}/Contents/Resources/"
   cp "${PKG_SCRIPT_ROOT}/Info.plist" "${pkg_root}/Contents/"
-
-  # Remove the redundant app created by the SDK since we are using a custom app bundle structure
-  rm -rf "${pkg_root}/Contents/MacOS/OpenTabletDriver.UX.MacOS.app"
 
   if type -p codesign
   then
