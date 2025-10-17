@@ -81,6 +81,7 @@ if [[ "${NET_RUNTIME}" =~ ^osx-.*$ ]]; then
   # signed builds must be single file, otherwise reduce package size by not using single file
   SINGLE_FILE="${SIGNED}"
   SELF_CONTAINED="true"
+  extra_args=("-p:MacBuildBundle=false ${extra_args[@]}")
 
   PACKAGE_GEN=${PACKAGE_GEN:-"macos"}
   PROJECTS+=('OpenTabletDriver.UX.MacOS')
