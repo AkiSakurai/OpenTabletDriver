@@ -15,7 +15,7 @@ jobs:
       VERSION_SUFFIX: ${{ github.event.inputs.version_suffix }}
     strategy:
       matrix:
-        build: [windows, macos, BinaryTarBall, RedHat, Debian, Simple]
+        build: [windows, macos-signed, BinaryTarBall, RedHat, Debian, Simple]
         runtime-suffix: [x64, arm64]
         include:
           - build: BinaryTarBall
@@ -31,7 +31,7 @@ jobs:
           - build: Simple
             os: ubuntu-latest
             runtime-prefix: linux-
-          - build: macos
+          - build: macos-signed
             os: macos-15
             runtime-prefix: osx-
             pre-command: brew install coreutils bash; echo "$(brew --prefix coreutils)/libexec/gnubin" >> $GITHUB_PATH
